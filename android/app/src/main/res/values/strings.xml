@@ -1,0 +1,7 @@
+<resources>
+    <string name="flutter_uploader_notification_started">Upload started Test</string>
+    <string name="flutter_uploader_notification_in_progress">Upload in progress test</string>
+    <string name="flutter_uploader_notification_canceled">Upload canceled test</string>
+    <string name="flutter_uploader_notification_failed">Upload failed tset</string>
+    <string name="flutter_uploader_notification_complete">Upload complete tests</string>
+</resources>
