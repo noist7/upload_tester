@@ -5,6 +5,7 @@ import 'package:flutter_uploader/flutter_uploader.dart';
 enum MediaType { Image, Video, File, Doc }
 
 class UploadItem {
+  final String filename;
   final String id;
   final String tag;
   final int progress;
@@ -13,15 +14,18 @@ class UploadItem {
   UploadItem({
     this.id,
     this.tag,
+    this.filename,
     this.progress = 0,
     this.status = UploadTaskStatus.undefined,
   });
 
   UploadItem copyWith({UploadTaskStatus status, int progress}) => UploadItem(
-      id: this.id,
-      tag: this.tag,
-      status: status ?? this.status,
-      progress: progress ?? this.progress);
+        id: this.id,
+        tag: this.tag,
+        status: status ?? this.status,
+        progress: progress ?? this.progress,
+        filename: this.filename,
+      );
 
   bool isCompleted() =>
       this.status == UploadTaskStatus.canceled ||
@@ -36,22 +40,6 @@ class UploadItem {
       'status': status.value,
     };
   }
-
-  factory UploadItem.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
-    return UploadItem(
-      id: map['id'],
-      tag: map['tag'],
-      progress: map['progress'],
-      status: UploadTaskStatus.from(map['status']),
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory UploadItem.fromJson(String source) =>
-      UploadItem.fromMap(json.decode(source));
 
   @override
   String toString() {

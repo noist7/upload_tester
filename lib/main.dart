@@ -6,9 +6,10 @@ import 'upload_manager.dart';
 import 'life_cycle_watcher.dart';
 
 const String title = "FileUpload Sample app";
-const String uploadURL = "http://fe55f29181f6.ngrok.io/upload";
+const String uploadURL = "https://noist-upload-server.herokuapp.com/upload";
 
 void main() {
+  print("Hello World");
   runApp(ChangeNotifierProvider(
       create: (context) => UploadManager(), child: App()));
 }

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 import 'model/upload_item.dart';
 
@@ -38,9 +39,10 @@ class UploadManager extends ChangeNotifier {
     String path, {
     fieldName = "file",
   }) async {
+    var uuid = Uuid();
     final String filename = basename(path);
     final String savedDir = dirname(path);
-    final tag = "File upload ${tasks.length + 1}";
+    final tag = uuid.v4();
     var fileItem = FileItem(
       filename: filename,
       savedDir: savedDir,
@@ -55,14 +57,16 @@ class UploadManager extends ChangeNotifier {
       showNotification: true,
     );
 
+    print("AddFileEvent:  $tag, $filename,");
+
     tasks.putIfAbsent(
         tag,
         () => UploadItem(
               id: taskId,
               tag: tag,
+              filename: filename,
               status: UploadTaskStatus.enqueued,
             ));
-
     // final taskStr = tasks.values.map((e) => e.toJson()).toList();
     // _sharedPreferences.then((s) => s.setStringList(_Upload_Key, taskStr));
     notifyListeners();
@@ -97,6 +101,7 @@ class UploadManager extends ChangeNotifier {
       notifyListeners();
     });
     _resultSubscription = _uploader.result.listen((result) {
+      print("TaskOnResult: $result");
       // print(
       //     "id: ${result.taskId}, status: ${result.status}, response: ${result.response}, statusCode: ${result.statusCode}, tag: ${result.tag}, headers: ${result.headers}");
 
@@ -114,7 +119,7 @@ class UploadManager extends ChangeNotifier {
       print("TaskOnError: $stacktrace");
       final exp = ex as UploadException;
       final task = _tasks[exp.tag];
-      _uploader.cancel(taskId: exp.taskId);
+      // _uploader.cancel(taskId: exp.taskId);
       if (task == null) return;
 
       _tasks[exp.tag] = task.copyWith(status: exp.status);

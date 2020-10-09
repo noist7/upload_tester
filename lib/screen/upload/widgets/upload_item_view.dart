@@ -37,7 +37,7 @@ class UploadItemView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Text(item.tag),
+              Text(item.filename),
               Container(
                 height: 5.0,
               ),

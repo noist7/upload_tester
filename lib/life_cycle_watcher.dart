@@ -29,7 +29,9 @@ class _LifecycleWatcherState extends State<LifecycleWatcher>
     if (state == AppLifecycleState.detached) {
       FlutterUploader uploader = FlutterUploader();
       uploader.cancelAll();
-      print("App Exited");
+      print("LifeCycle: App Exited");
+    } else {
+      print("LifeCycle: $state");
     }
   }
 
