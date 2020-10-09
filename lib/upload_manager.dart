@@ -3,25 +3,11 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:path/path.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 import 'model/upload_item.dart';
 
-// const _Upload_Key = "upload_file";
-
 class UploadManager extends ChangeNotifier {
-  // Completer<SharedPreferences> _sharedPreferencesCompleter;
-
-  // Future<SharedPreferences> get _sharedPreferences {
-  //   if (_sharedPreferencesCompleter == null) {
-  //     _sharedPreferencesCompleter = Completer<SharedPreferences>();
-  //     SharedPreferences.getInstance()
-  //         .then((s) => _sharedPreferencesCompleter.complete(s));
-  //   }
-  //   return _sharedPreferencesCompleter.future;
-  // }
-
   FlutterUploader _uploader = FlutterUploader();
   UploadManager() {
     _init();
@@ -65,8 +51,6 @@ class UploadManager extends ChangeNotifier {
               filename: filename,
               status: UploadTaskStatus.enqueued,
             ));
-    // final taskStr = tasks.values.map((e) => e.toJson()).toList();
-    // _sharedPreferences.then((s) => s.setStringList(_Upload_Key, taskStr));
     notifyListeners();
   }
 
@@ -75,21 +59,11 @@ class UploadManager extends ChangeNotifier {
   }
 
   void _init() async {
-    // final isExists = (await _sharedPreferences).containsKey(_Upload_Key);
-
-    // if (isExists) {
-    //   final taskStr = (await _sharedPreferences).getStringList(_Upload_Key);
-
-    //   final taskList = taskStr.map((e) => UploadItem.fromJson(e)).toList();
-
-    //   _tasks.addEntries(taskList.map((e) => MapEntry(e.tag, e)));
-    //   notifyListeners();
-    // }
-
     _progressSubscription = _uploader.progress.listen((progress) {
       final task = _tasks[progress.tag];
       if (task == null) return;
       if (task.isCompleted()) return;
+
       _tasks[progress.tag] =
           task.copyWith(progress: progress.progress, status: progress.status);
       notifyListeners();
@@ -103,12 +77,10 @@ class UploadManager extends ChangeNotifier {
     }, onError: (ex, stacktrace) {
       final exp = ex as UploadException;
       final task = _tasks[exp.tag];
-      // _uploader.cancel(taskId: exp.taskId);
+
       if (task == null) return;
 
       _tasks[exp.tag] = task.copyWith(status: exp.status);
-      // final taskStr = tasks.values.map((e) => e.toJson()).toList();
-      // _sharedPreferences.then((s) => s.setStringList(_Upload_Key, taskStr));
       notifyListeners();
     });
   }
