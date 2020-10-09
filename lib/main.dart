@@ -9,7 +9,6 @@ const String title = "FileUpload Sample app";
 const String uploadURL = "https://noist-upload-server.herokuapp.com/upload";
 
 void main() {
-  print("Hello World");
   runApp(ChangeNotifierProvider(
       create: (context) => UploadManager(), child: App()));
 }

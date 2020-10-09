@@ -57,8 +57,6 @@ class UploadManager extends ChangeNotifier {
       showNotification: true,
     );
 
-    print("AddFileEvent:  $tag, $filename,");
-
     tasks.putIfAbsent(
         tag,
         () => UploadItem(
@@ -90,10 +88,6 @@ class UploadManager extends ChangeNotifier {
 
     _progressSubscription = _uploader.progress.listen((progress) {
       final task = _tasks[progress.tag];
-      print("TaskListener: Tasks: $tasks");
-      print("TaskListener: Task: $task, ${progress.tag}");
-      print(
-          "TaskListener: progress: ${progress.progress} , tag: ${progress.tag}");
       if (task == null) return;
       if (task.isCompleted()) return;
       _tasks[progress.tag] =
@@ -101,22 +95,12 @@ class UploadManager extends ChangeNotifier {
       notifyListeners();
     });
     _resultSubscription = _uploader.result.listen((result) {
-      print("TaskOnResult: $result");
-      // print(
-      //     "id: ${result.taskId}, status: ${result.status}, response: ${result.response}, statusCode: ${result.statusCode}, tag: ${result.tag}, headers: ${result.headers}");
-
       final task = _tasks[result.tag];
       if (task == null) return;
 
       _tasks[result.tag] = task.copyWith(status: result.status);
-      // final taskStr = tasks.values.map((e) => e.toJson()).toList();
-      // _sharedPreferences.then((s) => s.setStringList(_Upload_Key, taskStr));
       notifyListeners();
     }, onError: (ex, stacktrace) {
-      // print("exception: $ex");
-      // print("stacktrace: $stacktrace" ?? "no stacktrace");
-      print("TaskOnError: $ex");
-      print("TaskOnError: $stacktrace");
       final exp = ex as UploadException;
       final task = _tasks[exp.tag];
       // _uploader.cancel(taskId: exp.taskId);

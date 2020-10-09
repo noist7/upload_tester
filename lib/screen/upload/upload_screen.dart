@@ -21,7 +21,6 @@ class _UploadScreenState extends State<UploadScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(Provider.of<UploadManager>(context).tasks);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Plugin example app'),
