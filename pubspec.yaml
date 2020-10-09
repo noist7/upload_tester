@@ -37,6 +37,7 @@ dependencies:
   shared_preferences: ^0.5.8
   flutter_local_notifications: ^1.4.4+2
   provider: ^4.3.2+2
+  enum_to_string: ^1.0.13
 
 dev_dependencies:
   flutter_test:

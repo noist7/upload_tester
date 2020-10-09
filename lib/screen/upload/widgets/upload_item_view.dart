@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
-import '../../../model/upload_item.dart';
 
-import '../../../main.dart';
+import '../../../model/upload_item.dart';
 
 typedef CancelUploadCallback = Future<void> Function(String id);
 
